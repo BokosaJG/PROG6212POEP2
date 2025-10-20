@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using CMCS_MVC.Models;
+using CMCSGUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace CMCS_MVC.Controllers
+namespace CMCSGUI.Controllers
 {
     public class ClaimsController : Controller
     {

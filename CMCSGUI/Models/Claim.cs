@@ -1,6 +1,6 @@
 using System;
 
-namespace CMCS_MVC.Models
+namespace CMCSGUI.Models
 {
     public class Claim
     {
