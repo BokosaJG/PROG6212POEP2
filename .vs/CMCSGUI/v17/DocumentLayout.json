@@ -7,10 +7,6 @@
       "RelativeMoniker": "D:0:0:{89C15440-5990-4E43-B47D-1F041D1E1A1E}|CMCSGUI\\CMCSGUI.csproj|solutionrelative:cmcsgui\\controllers\\claimscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\lab_services_student\\OneDrive - ADvTECH Ltd\\Desktop\\PROG6212\\CMCSGUI\\UnitTestProject1\\UnitTest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:UnitTestProject1\\UnitTest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{89C15440-5990-4E43-B47D-1F041D1E1A1E}|CMCSGUI\\CMCSGUI.csproj|c:\\users\\lab_services_student\\onedrive - advtech ltd\\desktop\\prog6212\\cmcsgui\\cmcsgui\\cmcsgui.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
       "RelativeMoniker": "D:0:0:{89C15440-5990-4E43-B47D-1F041D1E1A1E}|CMCSGUI\\CMCSGUI.csproj|solutionrelative:cmcsgui\\cmcsgui.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     }
@@ -30,39 +26,27 @@
               "Title": "ClaimsController.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\OneDrive - ADvTECH Ltd\\Desktop\\PROG6212\\CMCSGUI\\CMCSGUI\\Controllers\\ClaimsController.cs",
               "RelativeDocumentMoniker": "CMCSGUI\\Controllers\\ClaimsController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\OneDrive - ADvTECH Ltd\\Desktop\\PROG6212\\CMCSGUI\\CMCSGUI\\Controllers\\ClaimsController.cs*",
-              "RelativeToolTip": "CMCSGUI\\Controllers\\ClaimsController.cs*",
-              "ViewState": "AgIAACEAAAAAAAAAAAAowBEAAAAMAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\lab_services_student\\OneDrive - ADvTECH Ltd\\Desktop\\PROG6212\\CMCSGUI\\CMCSGUI\\Controllers\\ClaimsController.cs",
+              "RelativeToolTip": "CMCSGUI\\Controllers\\ClaimsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-20T13:03:26.299Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UnitTest1.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\OneDrive - ADvTECH Ltd\\Desktop\\PROG6212\\CMCSGUI\\UnitTestProject1\\UnitTest1.cs",
-              "RelativeDocumentMoniker": "UnitTestProject1\\UnitTest1.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\OneDrive - ADvTECH Ltd\\Desktop\\PROG6212\\CMCSGUI\\UnitTestProject1\\UnitTest1.cs",
-              "RelativeToolTip": "UnitTestProject1\\UnitTest1.cs",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T19:20:57.993Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "CMCSGUI",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\OneDrive - ADvTECH Ltd\\Desktop\\PROG6212\\CMCSGUI\\CMCSGUI\\CMCSGUI.csproj",
               "RelativeDocumentMoniker": "CMCSGUI\\CMCSGUI.csproj",
               "ToolTip": "C:\\Users\\lab_services_student\\OneDrive - ADvTECH Ltd\\Desktop\\PROG6212\\CMCSGUI\\CMCSGUI\\CMCSGUI.csproj",
               "RelativeToolTip": "CMCSGUI\\CMCSGUI.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-10-18T19:19:39.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T19:19:39.959Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }

@@ -15,7 +15,7 @@ namespace CMCS_MVC.Controllers
         // Simple in-memory store for prototype purposes
         private static List<Claim> _claims = new List<Claim>
         {
-            
+        
         };
 
         private readonly IWebHostEnvironment _env;
