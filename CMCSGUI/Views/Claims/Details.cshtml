@@ -1,0 +1,23 @@
+@model CMCS_MVC.Models.Claim
+@{ ViewData["Title"] = "Claim Details"; }
+<h1>Claim Details</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.LecturerName</h5>
+        <p><strong>Date:</strong> @Model.ClaimDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</p>
+        <p><strong>Hours:</strong> @Model.HoursWorked</p>
+        <p><strong>Rate:</strong> @Model.HourlyRate</p>
+        <p><strong>Amount:</strong> @Model.Amount</p>
+        <p><strong>Status:</strong> @Model.Status</p>
+        <p><strong>Notes:</strong> @Model.Notes</p>
+        <p><strong>Document:</strong>
+            @if(!string.IsNullOrEmpty(Model.SupportingDocumentPath)) {
+                <a target="_blank" href="@Model.SupportingDocumentPath">Download</a>
+            } else {
+                <em>No document</em>
+            }
+        </p>
+        <a class="btn btn-secondary" href="/Claims">Back</a>
+    </div>
+</div>

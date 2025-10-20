@@ -1,0 +1,59 @@
+@model IEnumerable<CMCS_MVC.Models.Claim>
+@{ ViewData["Title"] = "Claims"; }
+<h1>Claims</h1>
+
+@if(TempData["Message"] != null) {
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<p>
+    <a class="btn btn-primary" href="/Claims/Create">Submit New Claim</a>
+    <a class="btn btn-secondary" href="/Claims/Pending">View Pending</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Lecturer</th>
+            <th>Date</th>
+            <th>Hours</th>
+            <th>Rate</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Document</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var c in Model) {
+        <tr>
+            <td>@c.LecturerName</td>
+            <td>@c.ClaimDate.ToLocalTime().ToString("yyyy-MM-dd")</td>
+            <td>@c.HoursWorked</td>
+            <td>@c.HourlyRate</td>
+            <td>@c.Amount</td>
+            <td>@c.Status</td>
+            <td>
+                @if(!string.IsNullOrEmpty(c.SupportingDocumentPath)) {
+                    <a target="_blank" href="@c.SupportingDocumentPath">Download</a>
+                } else {
+                    <em>No document</em>
+                }
+            </td>
+            <td>
+                <a class="btn btn-sm btn-info" href="/Claims/Details/@c.Id">Details</a>
+                @if(c.Status == "Submitted" || c.Status == "Verified") {
+                    <form style="display:inline" asp-action="Approve" method="post">
+                        <input type="hidden" name="id" value="@c.Id" />
+                        <button class="btn btn-sm btn-success" type="submit">Approve</button>
+                    </form>
+                    <form style="display:inline" asp-action="Reject" method="post">
+                        <input type="hidden" name="id" value="@c.Id" />
+                        <button class="btn btn-sm btn-danger" type="submit">Reject</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
