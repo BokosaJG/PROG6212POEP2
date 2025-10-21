@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using CMCSGUI.Models;
 using System;
 using System.Collections.Generic;
@@ -80,15 +80,19 @@ namespace CMCSGUI.Controllers
         {
             try
             {
+                // ✅ Basic manual validation
+                if (string.IsNullOrWhiteSpace(claim.LecturerName))
+                    ModelState.AddModelError(nameof(claim.LecturerName), "Employee name is required.");
+
+                if (claim.HoursWorked <= 0)
+                    ModelState.AddModelError(nameof(claim.HoursWorked), "Hours worked must be greater than zero.");
+
+                if (claim.HourlyRate <= 0)
+                    ModelState.AddModelError(nameof(claim.HourlyRate), "Hourly rate must be greater than zero.");
+
                 if (!ModelState.IsValid)
                 {
-                    return View(claim);
-                }
-
-                // Basic validation
-                if (claim.HoursWorked < 0 || claim.HourlyRate < 0)
-                {
-                    ModelState.AddModelError("", "Hours and Rate must be non-negative.");
+                    TempData["Error"] = "Please correct the highlighted errors before submitting.";
                     return View(claim);
                 }
 
@@ -103,11 +107,13 @@ namespace CMCSGUI.Controllers
                         if (!allowed.Contains(ext))
                         {
                             ModelState.AddModelError("SupportingDocument", "File type not allowed. Allowed: .pdf, .docx, .xlsx, .doc");
+                            TempData["Error"] = "Unsupported file format.";
                             return View(claim);
                         }
                         if (supportingDocument.Length > 5_000_000)
                         {
                             ModelState.AddModelError("SupportingDocument", "File too large (max 5 MB).");
+                            TempData["Error"] = "File size exceeds the 5 MB limit.";
                             return View(claim);
                         }
 
@@ -128,11 +134,12 @@ namespace CMCSGUI.Controllers
                     {
                         _logger.LogError(fileEx, "File upload failed.");
                         ModelState.AddModelError("", "An error occurred while uploading the document. Please try again.");
+                        TempData["Error"] = "An error occurred while uploading the document.";
                         return View(claim);
                     }
                 }
 
-                // Save claim
+                // ✅ Save claim if all is valid
                 claim.Id = Guid.NewGuid();
                 claim.ClaimDate = DateTime.UtcNow;
                 claim.Status = "Submitted";

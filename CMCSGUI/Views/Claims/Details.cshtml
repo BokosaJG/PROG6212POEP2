@@ -1,23 +1,97 @@
 @model CMCSGUI.Models.Claim
-@{ ViewData["Title"] = "Claim Details"; }
-<h1>Claim Details</h1>
+@{
+    ViewData["Title"] = "Claim Details";
+}
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">@Model.LecturerName</h5>
-        <p><strong>Date:</strong> @Model.ClaimDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</p>
-        <p><strong>Hours:</strong> @Model.HoursWorked</p>
-        <p><strong>Rate:</strong> @Model.HourlyRate</p>
-        <p><strong>Amount:</strong> @Model.Amount</p>
-        <p><strong>Status:</strong> @Model.Status</p>
-        <p><strong>Notes:</strong> @Model.Notes</p>
-        <p><strong>Document:</strong>
-            @if(!string.IsNullOrEmpty(Model.SupportingDocumentPath)) {
-                <a target="_blank" href="@Model.SupportingDocumentPath">Download</a>
-            } else {
-                <em>No document</em>
-            }
-        </p>
-        <a class="btn btn-secondary" href="/Claims">Back</a>
+<h1 class="mb-4">Claim Details</h1>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Lecturer Name</dt>
+            <dd class="col-sm-9">@Model.LecturerName</dd>
+
+            <dt class="col-sm-3">Hours Worked</dt>
+            <dd class="col-sm-9">@Model.HoursWorked</dd>
+
+            <dt class="col-sm-3">Hourly Rate (ZAR)</dt>
+            <dd class="col-sm-9">R @Model.HourlyRate.ToString("N2")</dd>
+
+            <dt class="col-sm-3">Amount (ZAR)</dt>
+            <dd class="col-sm-9"><strong>R @(Model.HoursWorked* Model.HourlyRate).ToString("N2")</strong></dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">
+                @if (Model.Status == "Approved")
+                {
+                    <span class="badge bg-success">@Model.Status</span>
+                }
+                else if (Model.Status == "Rejected")
+                {
+                    <span class="badge bg-danger">@Model.Status</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">@Model.Status</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Claim Date</dt>
+            <dd class="col-sm-9">@Model.ClaimDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</dd>
+
+            @if (Model.LastUpdated != null)
+            {
+                <dt class="col-sm-3">Last Updated</dt>
+                <dd class="col-sm-9">@Model.LastUpdated?.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</dd>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Notes))
+            {
+                <dt class="col-sm-3">Notes</dt>
+                <dd class="col-sm-9">@Model.Notes</dd>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.SupportingDocumentPath))
+            {
+                <dt class="col-sm-3">Supporting Document</dt>
+                <dd class="col-sm-9">
+                    <a href="@Model.SupportingDocumentPath" target="_blank" class="btn btn-outline-primary btn-sm">
+                        Download Document
+                    </a>
+                </dd>
+            }
+        </dl>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+    @if (Model.Status == "Submitted" || Model.Status == "Verified")
+    {
+        <form asp-action="Approve" asp-route-id="@Model.Id" method="post" class="d-inline">
+            <button type="submit" class="btn btn-success">Approve</button>
+        </form>
+
+        <form asp-action="Reject" asp-route-id="@Model.Id" method="post" class="d-inline ms-2">
+            <input type="hidden" name="reason" value="Not specified" />
+            <button type="submit" class="btn btn-danger">Reject</button>
+        </form>
+    }
 </div>
