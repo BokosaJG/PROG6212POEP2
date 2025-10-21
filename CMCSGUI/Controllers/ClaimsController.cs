@@ -7,39 +7,70 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace CMCSGUI.Controllers
 {
     public class ClaimsController : Controller
     {
-        // Simple in-memory store for prototype purposes
-        private static List<Claim> _claims = new List<Claim>
-        {
-        
-        };
+        // In-memory data store
+        private static readonly List<Claim> _claims = new List<Claim>();
 
         private readonly IWebHostEnvironment _env;
-        public ClaimsController(IWebHostEnvironment env)
+        private readonly ILogger<ClaimsController> _logger;
+
+        public ClaimsController(IWebHostEnvironment env, ILogger<ClaimsController> logger)
         {
             _env = env;
+            _logger = logger;
         }
 
-        // Show all claims (for admin/coordinator/lecturer)
+        // Show all claims
         public IActionResult Index()
         {
-            return View(_claims.OrderByDescending(c => c.ClaimDate).ToList());
+            try
+            {
+                var list = _claims.OrderByDescending(c => c.ClaimDate).ToList();
+                return View(list);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading claims list.");
+                TempData["Error"] = "An unexpected error occurred while loading claims.";
+                return View(new List<Claim>());
+            }
         }
 
-        // Show pending claims only (for coordinators/managers)
+        // Show pending claims
         public IActionResult Pending()
         {
-            var pending = _claims.Where(c => c.Status == "Submitted" || c.Status == "Verified").ToList();
-            return View("Index", pending);
+            try
+            {
+                var pending = _claims
+                    .Where(c => c.Status == "Submitted" || c.Status == "Verified")
+                    .ToList();
+                return View("Index", pending);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading pending claims.");
+                TempData["Error"] = "An unexpected error occurred while loading pending claims.";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public IActionResult Create()
         {
-            return View(new Claim());
+            try
+            {
+                return View(new Claim());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error displaying create form.");
+                TempData["Error"] = "An error occurred while preparing the claim form.";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
@@ -47,85 +78,152 @@ namespace CMCSGUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Claim claim, IFormFile? supportingDocument)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View(claim);
-            }
-
-            // Basic validation
-            if (claim.HoursWorked < 0 || claim.HourlyRate < 0)
-            {
-                ModelState.AddModelError("", "Hours and Rate must be non-negative.");
-                return View(claim);
-            }
-
-            // Handle file upload
-            if (supportingDocument != null && supportingDocument.Length > 0)
-            {
-                var allowed = new[] { ".pdf", ".docx", ".xlsx", ".doc" };
-                var ext = Path.GetExtension(supportingDocument.FileName).ToLowerInvariant();
-                if (!allowed.Contains(ext))
+                if (!ModelState.IsValid)
                 {
-                    ModelState.AddModelError("SupportingDocument", "File type not allowed. Allowed: .pdf, .docx, .xlsx, .doc");
-                    return View(claim);
-                }
-                if (supportingDocument.Length > 5_000_000)
-                {
-                    ModelState.AddModelError("SupportingDocument", "File too large (max 5 MB).");
                     return View(claim);
                 }
 
-                var uploads = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(),"wwwroot"), "uploads");
-                Directory.CreateDirectory(uploads);
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var filePath = Path.Combine(uploads, fileName);
-                using (var stream = System.IO.File.Create(filePath))
+                // Basic validation
+                if (claim.HoursWorked < 0 || claim.HourlyRate < 0)
                 {
-                    await supportingDocument.CopyToAsync(stream);
+                    ModelState.AddModelError("", "Hours and Rate must be non-negative.");
+                    return View(claim);
                 }
-                claim.SupportingDocumentPath = $"/uploads/{fileName}";
+
+                // Handle file upload
+                if (supportingDocument != null && supportingDocument.Length > 0)
+                {
+                    try
+                    {
+                        var allowed = new[] { ".pdf", ".docx", ".xlsx", ".doc" };
+                        var ext = Path.GetExtension(supportingDocument.FileName).ToLowerInvariant();
+
+                        if (!allowed.Contains(ext))
+                        {
+                            ModelState.AddModelError("SupportingDocument", "File type not allowed. Allowed: .pdf, .docx, .xlsx, .doc");
+                            return View(claim);
+                        }
+                        if (supportingDocument.Length > 5_000_000)
+                        {
+                            ModelState.AddModelError("SupportingDocument", "File too large (max 5 MB).");
+                            return View(claim);
+                        }
+
+                        var uploads = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "uploads");
+                        Directory.CreateDirectory(uploads);
+
+                        var fileName = $"{Guid.NewGuid()}{ext}";
+                        var filePath = Path.Combine(uploads, fileName);
+
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            await supportingDocument.CopyToAsync(stream);
+                        }
+
+                        claim.SupportingDocumentPath = $"/uploads/{fileName}";
+                    }
+                    catch (Exception fileEx)
+                    {
+                        _logger.LogError(fileEx, "File upload failed.");
+                        ModelState.AddModelError("", "An error occurred while uploading the document. Please try again.");
+                        return View(claim);
+                    }
+                }
+
+                // Save claim
+                claim.Id = Guid.NewGuid();
+                claim.ClaimDate = DateTime.UtcNow;
+                claim.Status = "Submitted";
+                _claims.Add(claim);
+
+                TempData["Message"] = "Claim submitted successfully.";
+                return RedirectToAction(nameof(Index));
             }
-
-            claim.Id = Guid.NewGuid();
-            claim.ClaimDate = DateTime.UtcNow;
-            claim.Status = "Submitted";
-            _claims.Add(claim);
-
-            TempData["Message"] = "Claim submitted successfully.";
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating claim.");
+                TempData["Error"] = "An unexpected error occurred while creating the claim.";
+                return View(claim);
+            }
         }
 
         public IActionResult Details(Guid id)
         {
-            var claim = _claims.FirstOrDefault(c => c.Id == id);
-            if (claim == null) return NotFound();
-            return View(claim);
+            try
+            {
+                var claim = _claims.FirstOrDefault(c => c.Id == id);
+                if (claim == null)
+                {
+                    TempData["Error"] = "Claim not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(claim);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading claim details for {ClaimId}", id);
+                TempData["Error"] = "An error occurred while loading claim details.";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Approve(Guid id)
         {
-            var claim = _claims.FirstOrDefault(c => c.Id == id);
-            if (claim == null) return NotFound();
-            claim.Status = "Approved";
-            claim.LastUpdated = DateTime.UtcNow;
-            TempData["Message"] = $"Claim {claim.Id} approved.";
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var claim = _claims.FirstOrDefault(c => c.Id == id);
+                if (claim == null)
+                {
+                    TempData["Error"] = "Claim not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                claim.Status = "Approved";
+                claim.LastUpdated = DateTime.UtcNow;
+
+                TempData["Message"] = $"Claim {claim.Id} approved.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error approving claim {ClaimId}", id);
+                TempData["Error"] = "An unexpected error occurred while approving the claim.";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Reject(Guid id, string? reason)
         {
-            var claim = _claims.FirstOrDefault(c => c.Id == id);
-            if (claim == null) return NotFound();
-            claim.Status = "Rejected";
-            claim.LastUpdated = DateTime.UtcNow;
-            if (!string.IsNullOrWhiteSpace(reason))
-                claim.Notes = (claim.Notes ?? "") + $"\nRejection reason: {reason}";
-            TempData["Message"] = $"Claim {claim.Id} rejected.";
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var claim = _claims.FirstOrDefault(c => c.Id == id);
+                if (claim == null)
+                {
+                    TempData["Error"] = "Claim not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                claim.Status = "Rejected";
+                claim.LastUpdated = DateTime.UtcNow;
+
+                if (!string.IsNullOrWhiteSpace(reason))
+                    claim.Notes = (claim.Notes ?? "") + $"\nRejection reason: {reason}";
+
+                TempData["Message"] = $"Claim {claim.Id} rejected.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error rejecting claim {ClaimId}", id);
+                TempData["Error"] = "An unexpected error occurred while rejecting the claim.";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

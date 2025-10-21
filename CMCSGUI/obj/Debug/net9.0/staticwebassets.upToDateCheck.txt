@@ -61,6 +61,7 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\uploads\b4c071b5-0eb7-4962-a5be-2309dd8b0d85.pdf
 C:\Users\lab_services_student\OneDrive - ADvTECH Ltd\Desktop\PROG6212\CMCSGUI\CMCSGUI\wwwroot\css\site.css
 C:\Users\lab_services_student\OneDrive - ADvTECH Ltd\Desktop\PROG6212\CMCSGUI\CMCSGUI\wwwroot\favicon.ico
 C:\Users\lab_services_student\OneDrive - ADvTECH Ltd\Desktop\PROG6212\CMCSGUI\CMCSGUI\wwwroot\js\site.js
