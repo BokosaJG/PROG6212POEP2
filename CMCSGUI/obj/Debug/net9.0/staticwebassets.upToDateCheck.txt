@@ -61,12 +61,18 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\uploads\7444119a-c7d6-453c-9d67-248254fc0902.pdf
 wwwroot\uploads\83956f5a-30e3-41ab-9467-93b196d4f6d3.pdf
 wwwroot\uploads\910d7a27-ea5d-4761-8705-30683dff008d.pdf
 wwwroot\uploads\af6ee104-dd14-41a1-891b-6cb4946cbad3.pdf
 wwwroot\uploads\b4c071b5-0eb7-4962-a5be-2309dd8b0d85.pdf
 wwwroot\uploads\bc817662-4d89-4485-84bf-97410907f327.pdf
+wwwroot\uploads\bfbae297-e423-4a5b-9cbb-c74338e2caf9.pdf
+wwwroot\uploads\c0edc578-4ad4-413d-ac59-dc9ed1e56b53.pdf
+wwwroot\uploads\cb176303-19f5-4a37-bf6f-71040a878ed4.pdf
 wwwroot\uploads\e5837c35-1ce4-42e0-b470-79a8f7b0f878.pdf
+wwwroot\uploads\f7d87c2f-a582-47bd-80c2-20119c19da31.pdf
+wwwroot\uploads\fe13e8f5-d2be-4997-a25f-1e91190c8ce8.pdf
 C:\Users\lab_services_student\OneDrive - ADvTECH Ltd\Desktop\PROG6212\CMCSGUI\CMCSGUI\wwwroot\css\site.css
 C:\Users\lab_services_student\OneDrive - ADvTECH Ltd\Desktop\PROG6212\CMCSGUI\CMCSGUI\wwwroot\favicon.ico
 C:\Users\lab_services_student\OneDrive - ADvTECH Ltd\Desktop\PROG6212\CMCSGUI\CMCSGUI\wwwroot\js\site.js

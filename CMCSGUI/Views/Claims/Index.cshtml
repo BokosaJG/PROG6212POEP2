@@ -30,8 +30,9 @@
             <td>@c.LecturerName</td>
             <td>@c.ClaimDate.ToLocalTime().ToString("yyyy-MM-dd")</td>
             <td>@c.HoursWorked</td>
-            <td>@c.HourlyRate</td>
-            <td>@c.TotalAmount</td>
+                <td>@String.Format(new System.Globalization.CultureInfo("en-ZA"), "{0:C}", c.HourlyRate)</td>
+                <td>@String.Format(new System.Globalization.CultureInfo("en-ZA"), "{0:C}", c.TotalAmount)</td>
+
             <td>@c.Status</td>
             <td>
                 @if(!string.IsNullOrEmpty(c.SupportingDocumentPath)) {

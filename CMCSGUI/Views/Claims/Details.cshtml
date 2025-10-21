@@ -31,10 +31,10 @@
             <dd class="col-sm-9">@Model.HoursWorked</dd>
 
             <dt class="col-sm-3">Hourly Rate (ZAR)</dt>
-            <dd class="col-sm-9">R @Model.HourlyRate.ToString("N2")</dd>
+            <dd class="col-sm-9">R @Model.HourlyRate</dd>
 
             <dt class="col-sm-3">Amount (ZAR)</dt>
-            <dd class="col-sm-9"><strong>R @(Model.HoursWorked* Model.HourlyRate).ToString("N2")</strong></dd>
+            <dd class="col-sm-9"><strong>R @(Model.HoursWorked* Model.HourlyRate)</strong></dd>
 
             <dt class="col-sm-3">Status</dt>
             <dd class="col-sm-9">
